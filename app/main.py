@@ -1,5 +1,7 @@
 from fastapi import FastAPI, Depends, HTTPException
+
 from sqlalchemy.orm import Session
+from app.schemas import LeadORM, LeadSearchRequest
 import dotenv
 dotenv.load_dotenv()
 
@@ -13,6 +15,7 @@ from app.services.vector_service import embed, similarity
 # --- Inicializar base de datos ---
 Base.metadata.create_all(bind=engine)
 app = FastAPI(title="Microservicio de Leads de Restaurantes")
+
 # ---------------------------------------------------------------------------
 # HEALTH CHECK
 # ---------------------------------------------------------------------------
@@ -74,18 +77,18 @@ def compute_lead_score(lead: LeadORM, query: str) -> float:
 # BÚSQUEDA POR SIMILITUD
 # ---------------------------------------------------------------------------
 @app.post("/api/leads/search", response_model=list[LeadResponse])
-def search_leads(payload: dict, db: Session = Depends(get_db)):
-    search_query = payload.get("query")
+def search_leads(payload: LeadSearchRequest, db: Session = Depends(get_db)): 
+    search_query = payload.query 
+    
     if not search_query:
         raise HTTPException(status_code=400, detail="Query is required")
 
     all_leads = db.query(LeadORM).all()
 
-# Calcular puntuaciones de similitud
+    # Calcular puntuaciones de similitud
     scored_leads = [
         {"lead": lead, "score": compute_lead_score(lead, search_query)}
         for lead in all_leads
     ]
-    
     scored_leads.sort(key=lambda x: x["score"], reverse=True)
     return [item["lead"] for item in scored_leads]

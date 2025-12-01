@@ -2,23 +2,17 @@ from sqlalchemy import Column, Integer, String
 from app.db import Base
 from pydantic import BaseModel
 
-
-
-# Modelo ORM para la tabla "leads" en la base de datos
+# --- Modelo ORM (Base de Datos) ---
 class LeadORM(Base):
-    # Nombre real de la tabla en la BD
     __tablename__ = "leads"  
-    # Definición de columnas
-    id = Column(Integer, primary_key=True, index=True)  # ID autoincremental
-    name = Column(String, nullable=False)               # Nombre obligatorio
-    email = Column(String, nullable=False)              # Email obligatorio
-    phone = Column(String, nullable=False)              # Teléfono
-    restaurant_type = Column(String, nullable=False)    # Tipo de comida (Mariscos, Tacos, etc.)
-    city = Column(String, nullable=False)               # Ciudad
     
+    id = Column(Integer, primary_key=True, index=True)
+    name = Column(String, nullable=False)
+    email = Column(String, nullable=False)
+    phone = Column(String, nullable=False)
+    restaurant_type = Column(String, nullable=False)
+    city = Column(String, nullable=False)
 
-
+# --- Modelo Pydantic (Validación de Búsqueda) ---
 class LeadSearchRequest(BaseModel):
-    query: str
-
-
+    query: str #"Ingrese su consulta aquí"  # Reemplazar con los campos necesarios para la búsqueda

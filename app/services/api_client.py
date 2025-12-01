@@ -16,6 +16,7 @@ async def fetch_city_info(city: str):
             #Se establece un timeout de 10 segundos para evitar esperas largas si la API falla
             response = await client.get(BASE_URL, params=params, headers=headers, timeout=10)
             response.raise_for_status()
+            print(f"Respuesta de la API externa para la ciudad '{city}': {response.json()}")
             return response.json() # Retorna la respuesta JSON de la API externa
         except httpx.HTTPError as e:
             print(f"Error al llamar a la API externa: {e}")
