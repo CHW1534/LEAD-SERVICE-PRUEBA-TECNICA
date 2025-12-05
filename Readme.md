@@ -299,4 +299,3 @@ curl -X POST "http://127.0.0.1:8000/api/leads/search" -H "accept: application/js
 ```
 
 Debería aparecer primero: **Tacos El Rey**.
->>>>>>> 9835a0a (Actualización de README y lógica del microservicio)
